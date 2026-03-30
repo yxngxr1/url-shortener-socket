@@ -2,7 +2,7 @@ package com.example.app.server;
 
 import java.util.Map;
 
-class HttpRequest {
+public class HttpRequest {
 	private final String method;
 	private final String path;
 	private final String protocol;

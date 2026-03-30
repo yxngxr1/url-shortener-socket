@@ -10,11 +10,16 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SocketServer {
-	private static final int PORT = 8095;
-	private final ExecutorService execcutor = Executors.newFixedThreadPool(1);
+import com.example.app.handler.Handler;
+import com.example.app.handler.Router;
 
-	public SocketServer() {
+public class SocketServer {
+	private final int PORT = 8095;
+	private final ExecutorService execcutor = Executors.newFixedThreadPool(1);
+	private final Router router;
+
+	public SocketServer(Router router) {
+		this.router = router;
 	}
 
 	public void start() throws IOException {
@@ -36,9 +41,12 @@ public class SocketServer {
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
 			System.out.println(clientSocket.getPort());
 
-			RequestParser.parse(reader);
+			HttpRequest request = RequestParser.parse(reader);
 
-			writer.write("Hi " + clientSocket.getPort());
+			Handler handler = router.get(request.getMethod(), request.getPath());
+			HttpResponse response = handler.handle(request);
+
+			writer.write(response.build());
 			writer.flush();
 			clientSocket.close();
 		} catch (Exception e) {
