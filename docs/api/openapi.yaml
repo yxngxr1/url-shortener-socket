@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: URL Shortener
+  version: 1.0.0
+
+paths:
+  /shorten:
+    post:
+      summary: Create short URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  example: "https://example.com/very-long-url"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  short:
+                    type: string
+                    example: "abc123"
+        '400':
+          description: Bad request - URL is missing or invalid
+        '500':
+          description: Internal server error
+
+  /{code}:
+    get:
+      summary: Get original URL
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "abc123"
+      responses:
+        '200':
+          description: Original URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    example: "https://example.com/very-long-url"
+        '404':
+          description: Short code not found
+        '500':
+          description: Internal server error
+
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
