@@ -14,7 +14,7 @@ public class Router {
 		handleMap.put(path, handler);
 	}
 
-	public Handler get(String method, String path) {
+	public Handler get(String path) {
 		return handleMap.getOrDefault(path, new NotFoundHandler());
 	}
 }

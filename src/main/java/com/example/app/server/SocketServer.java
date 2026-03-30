@@ -43,12 +43,11 @@ public class SocketServer {
 
 			HttpRequest request = RequestParser.parse(reader);
 
-			Handler handler = router.get(request.getMethod(), request.getPath());
+			Handler handler = router.get(request.getPath());
 			HttpResponse response = handler.handle(request);
 
 			writer.write(response.build());
 			writer.flush();
-			clientSocket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

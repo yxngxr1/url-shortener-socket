@@ -12,6 +12,11 @@ public class HttpResponse {
 		this.statusCode = statusCode;
 	}
 
+	public HttpResponse(int statusCode, String body) {
+		this.statusCode = statusCode;
+		this.body = body;
+	}
+
 	public HttpResponse(int statusCode, Map<String, String> headers, String body) {
 		this.statusCode = statusCode;
 		this.headers.putAll(headers);
@@ -20,7 +25,7 @@ public class HttpResponse {
 
 	public char[] build() {
 		if (body != null) {
-			headers.put("Content-Type", "text/html");
+			headers.put("Content-Type", "application/json");
 			headers.put("Content-Length", String.valueOf(body.getBytes().length));
 		}
 		StringBuilder sb = new StringBuilder();
@@ -38,6 +43,8 @@ public class HttpResponse {
 	private String getReasonPhrase() {
 		return switch (statusCode) {
 			case 200 -> "Ok";
+			case 201 -> "Created";
+			case 405 -> "Method Not Allowed";
 			default -> "";
 		};
 	}
