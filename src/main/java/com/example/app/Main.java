@@ -7,8 +7,13 @@ import com.example.app.handler.Router;
 import com.example.app.handler.UrlShortenerHandler;
 import com.example.app.server.SocketServer;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class Main {
 	public static void main(String[] args) throws IOException {
+		Dotenv dotenv = Dotenv.load();
+
+		DatabaseMigrator.migrate(dotenv);
 
 		Router router = new Router();
 		router.put("/health", new HealthHandler());
