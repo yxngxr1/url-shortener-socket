@@ -14,6 +14,7 @@ public class Main {
 		Dotenv dotenv = Dotenv.load();
 
 		DatabaseMigrator.migrate(dotenv);
+		DatabaseManager.init(dotenv);
 
 		Router router = new Router();
 		router.put("/health", new HealthHandler());

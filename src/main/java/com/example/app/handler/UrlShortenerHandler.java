@@ -5,8 +5,14 @@ import org.json.JSONObject;
 
 import com.example.app.server.HttpRequest;
 import com.example.app.server.HttpResponse;
+import com.example.app.service.UrlShortenerService;
 
 public class UrlShortenerHandler implements Handler {
+	private final UrlShortenerService service;
+
+	public UrlShortenerHandler() {
+		this.service = new UrlShortenerService();
+	}
 
 	public HttpResponse handle(HttpRequest request) {
 		switch (request.getMethod()) {
@@ -49,11 +55,15 @@ public class UrlShortenerHandler implements Handler {
 			return getErrorResponse(400, "Invalid URL format");
 		}
 
-		JSONObject responseBody = new JSONObject();
-		responseBody.put("shortUrl", url);
+		try {
+			String shortCode = service.shorten(url);
+			JSONObject responseBody = new JSONObject();
+			responseBody.put("shortUrl", "https://localhost:8095/" + shortCode);
 
-		return new HttpResponse(201, responseBody.toString());
-
+			return new HttpResponse(201, responseBody.toString());
+		} catch (Exception e) {
+			return getErrorResponse(500, "Server error: " + e.getMessage());
+		}
 	}
 
 	private HttpResponse methodNotAllowed(String method) {
