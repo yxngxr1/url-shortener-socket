@@ -1,6 +1,7 @@
 package com.example.app.service;
 
 import java.security.MessageDigest;
+import java.sql.SQLException;
 
 import com.example.app.repository.UrlRepository;
 
@@ -30,5 +31,14 @@ public class UrlShortenerService {
 		byte[] digest = md.digest(url.getBytes());
 		String hash = new BigInteger(1, digest).toString(16);
 		return hash.substring(0, 8);
+	}
+
+	public String getUrl(String code) throws SQLException {
+		String url;
+		url = repository.findByCode(code);
+		if (url == null) {
+			throw new IllegalArgumentException("Short code not found: " + code);
+		}
+		return url;
 	}
 }

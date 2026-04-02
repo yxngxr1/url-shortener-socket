@@ -23,7 +23,7 @@ class RequestParser {
 
 		body = parseBody(reader, headers);
 		// System.out.println(body);
-		return new HttpRequest(startLine.method, startLine.path, startLine.protocol, headers, body);
+		return new HttpRequest(startLine.method, startLine.path, startLine.queryParams, startLine.protocol, headers, body);
 	}
 
 	private static String parseBody(BufferedReader reader, Map<String, String> headers) throws HttpRequestParseException {
@@ -70,14 +70,16 @@ class RequestParser {
 		}
 
 		String method = startLineArr[0];
-		String path = startLineArr[1];
+		String fullPath = startLineArr[1];
 		String protocol = startLineArr[2];
 
-		return new StartLine(method, path, protocol);
+		String path = fullPath.contains("?") ? fullPath.substring(0, fullPath.indexOf('?')) : fullPath;
+		Map<String, String> queryParams = parseQueryParams(fullPath);
 
+		return new StartLine(method, path, protocol, queryParams);
 	}
 
-	private static record StartLine(String method, String path, String protocol) {
+	private static record StartLine(String method, String path, String protocol, Map<String, String> queryParams) {
 	};
 
 	private static Map<String, String> parseHeaders(BufferedReader reader) throws HttpRequestParseException {
@@ -95,5 +97,24 @@ class RequestParser {
 			throw new HttpRequestParseException("Failed to read");
 		}
 		return headers;
+	}
+
+	private static Map<String, String> parseQueryParams(String path) {
+		Map<String, String> params = new HashMap<>();
+		int queryIndex = path.indexOf('?');
+		if (queryIndex == -1) {
+			return params;
+		}
+
+		String query = path.substring(queryIndex + 1);
+		String[] pairs = query.split("&");
+
+		for (String pair : pairs) {
+			String[] keyValue = pair.split("=", 2);
+			if (keyValue.length == 2) {
+				params.put(keyValue[0], keyValue[1]);
+			}
+		}
+		return params;
 	}
 }

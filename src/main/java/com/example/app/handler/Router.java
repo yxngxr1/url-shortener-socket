@@ -15,6 +15,15 @@ public class Router {
 	}
 
 	public Handler get(String path) {
-		return handleMap.getOrDefault(path, new NotFoundHandler());
+		if (handleMap.containsKey(path)) {
+			return handleMap.get(path);
+		}
+
+		if (path.matches("/[A-Za-z0-9]+")) {
+			return handleMap.get("/redirect");
+		}
+
+		return new NotFoundHandler();
+
 	}
 }

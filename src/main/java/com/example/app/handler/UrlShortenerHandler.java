@@ -74,7 +74,6 @@ public class UrlShortenerHandler implements Handler {
 		JSONObject responseBody = new JSONObject();
 		responseBody.put("message", message);
 		return new HttpResponse(status, responseBody.toString());
-
 	}
 
 	private boolean isValidUrl(String url) {
