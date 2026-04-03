@@ -41,6 +41,8 @@ public class SocketServer {
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
 			System.out.println(clientSocket.getPort());
 
+			long start = System.currentTimeMillis();
+
 			HttpRequest request = RequestParser.parse(reader);
 
 			Handler handler = router.get(request.getPath());
@@ -48,10 +50,11 @@ public class SocketServer {
 
 			writer.write(response.build());
 			writer.flush();
+
+			long duration = System.currentTimeMillis() - start;
+			System.out.println("Request took: " + duration + " ms");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

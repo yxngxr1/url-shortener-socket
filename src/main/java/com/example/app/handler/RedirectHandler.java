@@ -23,7 +23,7 @@ public class RedirectHandler implements Handler {
 		} catch (Exception e) {
 			JSONObject responseBody = new JSONObject();
 			responseBody.put("message", e.getMessage());
-			return new HttpResponse(500, responseBody.toString());
+			return new HttpResponse(404, responseBody.toString());
 		}
 	}
 
