@@ -1,6 +1,6 @@
 package com.example.app.exceptions;
 
-public class HttpRequestParseException extends Exception {
+public class HttpRequestParseException extends RuntimeException {
 	public HttpRequestParseException(String message) {
 		super(message);
 	}

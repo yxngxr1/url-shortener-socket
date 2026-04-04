@@ -39,7 +39,7 @@ public class SocketServer {
 		try (clientSocket;
 				BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()))) {
-			System.out.println(clientSocket.getPort());
+			System.out.print(clientSocket.getPort() + " ");
 
 			long start = System.currentTimeMillis();
 

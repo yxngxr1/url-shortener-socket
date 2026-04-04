@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.app.exceptions.*;
+import com.example.app.exceptions.HttpRequestParseException;
 
 class RequestParser {
-	public static HttpRequest parse(BufferedReader reader) throws IOException, HttpRequestParseException {
+	public static HttpRequest parse(BufferedReader reader) throws IOException {
 		StartLine startLine;
 		Map<String, String> headers;
 		String body;
@@ -26,7 +26,7 @@ class RequestParser {
 		return new HttpRequest(startLine.method, startLine.path, startLine.queryParams, startLine.protocol, headers, body);
 	}
 
-	private static String parseBody(BufferedReader reader, Map<String, String> headers) throws HttpRequestParseException {
+	private static String parseBody(BufferedReader reader, Map<String, String> headers) {
 		String contentLength = headers.get("Content-Length");
 		if (contentLength == null) {
 			return "";
@@ -53,7 +53,7 @@ class RequestParser {
 
 	}
 
-	private static StartLine parseStartLine(BufferedReader reader) throws HttpRequestParseException {
+	private static StartLine parseStartLine(BufferedReader reader) {
 		String startLine;
 		try {
 			startLine = reader.readLine();
@@ -82,7 +82,7 @@ class RequestParser {
 	private static record StartLine(String method, String path, String protocol, Map<String, String> queryParams) {
 	};
 
-	private static Map<String, String> parseHeaders(BufferedReader reader) throws HttpRequestParseException {
+	private static Map<String, String> parseHeaders(BufferedReader reader) {
 		Map<String, String> headers = new HashMap<>();
 		String header;
 		try {

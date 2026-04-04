@@ -3,6 +3,7 @@ package com.example.app.service;
 import java.security.MessageDigest;
 import java.sql.SQLException;
 
+import com.example.app.exceptions.NotFoundException;
 import com.example.app.repository.UrlRepository;
 
 import java.math.BigInteger;
@@ -37,7 +38,7 @@ public class UrlShortenerService {
 		String url;
 		url = repository.findByCode(code);
 		if (url == null) {
-			throw new IllegalArgumentException("Short code not found: " + code);
+			throw new NotFoundException("Short code not found: " + code);
 		}
 		return url;
 	}

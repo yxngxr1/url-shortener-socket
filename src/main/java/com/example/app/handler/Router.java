@@ -24,6 +24,5 @@ public class Router {
 		}
 
 		return new NotFoundHandler();
-
 	}
 }

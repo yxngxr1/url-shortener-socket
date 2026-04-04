@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import com.example.app.server.HttpRequest;
 import com.example.app.server.HttpResponse;
+import com.example.app.server.ResponseFactory;
 import com.example.app.service.UrlShortenerService;
 
 public class RedirectHandler implements Handler {
@@ -19,11 +20,9 @@ public class RedirectHandler implements Handler {
 			String url = service.getUrl(path.substring(1, path.length()));
 			JSONObject jsonBody = new JSONObject();
 			jsonBody.put("url", url);
-			return new HttpResponse(200, jsonBody.toString());
+			return ResponseFactory.ok(jsonBody.toString());
 		} catch (Exception e) {
-			JSONObject responseBody = new JSONObject();
-			responseBody.put("message", e.getMessage());
-			return new HttpResponse(404, responseBody.toString());
+			return ResponseFactory.notFound(e.getMessage());
 		}
 	}
 
